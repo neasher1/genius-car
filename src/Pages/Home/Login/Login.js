@@ -2,7 +2,7 @@ import { GoogleAuthProvider } from 'firebase/auth';
 import React, { useState } from 'react';
 import { useContext } from 'react';
 import { FaGoogle } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import img from '../../../assets/images/login/login.svg';
 import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 
@@ -15,19 +15,22 @@ const Login = () => {
 
     const { signInUser, signInGoogle } = useContext(AuthContext);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const from = location.state?.from?.pathname || "/";
 
     const handleLogin = event => {
         event.preventDefault();
-        const from = event.target;
-        const email = from.email.value;
-        const password = from.password.value;
+        const form = event.target;
+        const email = form.email.value;
+        const password = form.password.value;
 
         signInUser(email, password)
             .then(result => {
                 const user = result.user;
-                from.reset();
+                form.reset();
                 setSuccess("User created successfully");
-                navigate('/');
+                navigate(from, { replace: true });
                 console.log(user);
             })
             .catch(error => {
@@ -40,7 +43,7 @@ const Login = () => {
         signInGoogle(googleProvider)
             .then(result => {
                 const user = result.user;
-                navigate('/');
+                navigate(from, { replace: true });
                 console.log(user);
             })
             .catch(error => {
