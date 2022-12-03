@@ -28,7 +28,7 @@ const router = createBrowserRouter([
                 path: '/checkout/:id',
                 element: <PrivateRoutes><CheckOut></CheckOut></PrivateRoutes>,
                 // sent specific id in server side 
-                loader: ({ params }) => fetch(`http://localhost:5000/services/${params.id}`),
+                loader: ({ params }) => fetch(`https://genius-car-server-five-lime.vercel.app/${params.id}`),
             },
             {
                 path: '/orders',
